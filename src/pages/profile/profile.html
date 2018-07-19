@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>ClubChat</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding >
+
+  <ion-list no-lines>
+    <ion-list-header>Tell people a little about you</ion-list-header>
+    <ion-item>
+      <ion-label>What is your name</ion-label>
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Are you a Man or Woman</ion-label>
+      <ion-select [(ngModel)]="gender">
+        <ion-option value="Man">Man</ion-option>
+        <ion-option value="Women">Women</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Are you in a relationship?</ion-label>
+      <ion-select [(ngModel)]="relationship">
+        <ion-option value="Yes">Yes</ion-option>
+        <ion-option value="No">No</ion-option>
+        <ion-option value="Not Telling">Not Telling</ion-option>
+      </ion-select>
+    </ion-item>
+    </ion-list>
+    <button ion-button (click)="gotoRoom()" block>Chat</button>
+</ion-content>
