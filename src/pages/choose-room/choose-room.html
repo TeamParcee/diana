@@ -16,5 +16,5 @@
   <span *ngFor="let room of rooms">
       <button clear ion-button block (click)="joinRoom(room.name)">{{room.name}} ({{room.count}})</button>
   </span>
-  <div #map id="map"></div>
+  <div style="display:none" #map id="map"></div>
 </ion-content>

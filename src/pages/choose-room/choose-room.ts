@@ -3,11 +3,11 @@ import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { Storage } from '@ionic/storage';
+import { LoadingProvider } from '../../providers/loading/loading';
 
 
 declare var google;
 let map: any;
-let infowindow: any;
 let options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -23,6 +23,7 @@ export class ChooseRoomPage {
   @ViewChild('map') mapElement: ElementRef;
 
   constructor(
+    private loading: LoadingProvider,
     private ls: Storage,
     public navCtrl: NavController, 
     public navParams: NavParams) {
@@ -70,9 +71,11 @@ export class ChooseRoomPage {
 
   // initilize the lobby
   async init(){
+      this.loading.show();
       await this.initMap();
       await this.getUser();
       await this.resetRoomField();
+      this.loading.hide();
       // await this.addMap(41.1930980, -96.1647750);
   }
   // Get user data from local storage so we have users uid

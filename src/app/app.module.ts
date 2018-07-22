@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import * as firebase from 'firebase';
 import { IonicStorageModule } from '@ionic/storage';
+import { LoadingProvider } from '../providers/loading/loading';
 
   // Initialize Firebase
   var config = {
@@ -37,7 +38,8 @@ import { IonicStorageModule } from '@ionic/storage';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    LoadingProvider
   ]
 })
 export class AppModule {}
