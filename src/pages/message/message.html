@@ -1,0 +1,42 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{recipent.name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+  <ion-list no-lines>
+    <ion-item *ngFor="let post of messages">
+          <ion-avatar  *ngIf="post.user.uid != user.uid"  item-start>
+              <img src="{{post.user.photoURL}}" />
+            </ion-avatar>
+            <div  *ngIf="post.user.uid != user.uid" float-left>
+                <h2  text-wrap>{{post.text}}</h2>
+            </div>
+
+          <ion-avatar  *ngIf="post.user.uid == user.uid"  item-end>
+              <img src="{{post.user.photoURL}}" />
+            </ion-avatar>
+            <div  *ngIf="post.user.uid == user.uid" text-right float-right>
+                <h2  text-wrap>{{post.text}}</h2>
+            </div>
+        
+          
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+      <ion-textarea  fz-elastic [(ngModel)]="text" rows="1"></ion-textarea>
+      <ion-buttons end>
+          <button (click)="sendMessage()" ion-button icon-end>
+            Send
+            <ion-icon  name="send"></ion-icon>
+          </button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>

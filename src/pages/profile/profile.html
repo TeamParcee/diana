@@ -1,31 +1,40 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>ClubChat</ion-title>
+    <ion-title>Profile</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding >
-
+    <p class="profile-header">Tell people a little about you</p>
   <ion-list no-lines>
-    <ion-list-header>Tell people a little about you</ion-list-header>
+    
+    <ion-item text-center>
+        <img height="150" width="150" src="{{photoURL}}" tappable>
+        <div  >
+            <label tappable for="pic">Change Photo</label>
+            <input style="display:none" (change)="previewPic($event)"  name="pic" id="pic" type="file">
+          </div>
+
+
+      </ion-item>
     <ion-item>
-      <ion-label>What is your name</ion-label>
+      <ion-label>What is your name?</ion-label>
       <ion-input type="text" [(ngModel)]="name"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Are you a Man or Woman</ion-label>
+      <ion-label>Are you a Man or Woman?</ion-label>
       <ion-select [(ngModel)]="gender">
         <ion-option value="Man">Man</ion-option>
-        <ion-option value="Women">Women</ion-option>
+        <ion-option value="Woman">Woman</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Are you in a relationship?</ion-label>
-      <ion-select [(ngModel)]="relationship">
-        <ion-option value="Yes">Yes</ion-option>
-        <ion-option value="No">No</ion-option>
+      <ion-label>Relationship Status?</ion-label>
+      <ion-select text-wrap [(ngModel)]="relationship">
+        <ion-option value="In Relationship">In Relationship</ion-option>
+        <ion-option value="Single">Single</ion-option>
         <ion-option value="Not Telling">Not Telling</ion-option>
       </ion-select>
     </ion-item>
     </ion-list>
-    <button ion-button (click)="gotoRoom()" block>Chat</button>
+    <button clear style="font-size: 20px; font-weight: 600" [disabled]="!name || !gender || !relationship" ion-button (click)="save()" block>Save</button>
 </ion-content>

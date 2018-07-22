@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { RoomPage } from './room';
+import { MessagePage } from './message';
 import { ElasticModule } from 'ng-elastic';
 
 @NgModule({
   declarations: [
-    RoomPage,
+    MessagePage,
   ],
   imports: [
-    IonicPageModule.forChild(RoomPage),
+    IonicPageModule.forChild(MessagePage),
     ElasticModule,
-
   ],
 })
-export class RoomPageModule {}
+export class MessagePageModule {}

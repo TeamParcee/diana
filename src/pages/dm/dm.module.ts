@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { DmPage } from './dm';
+import { ElasticModule } from 'ng-elastic';
 
 @NgModule({
   declarations: [
@@ -8,6 +9,7 @@ import { DmPage } from './dm';
   ],
   imports: [
     IonicPageModule.forChild(DmPage),
+    ElasticModule,
   ],
 })
 export class DmPageModule {}
