@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, Loading } from 'ionic-angular/umd';
+import { LoadingController, Loading } from 'ionic-angular';
 
 @Injectable()
 export class LoadingProvider {
@@ -11,6 +11,7 @@ export class LoadingProvider {
 loading: Loading;
 async show(){
   this.loading = await this.loadingCtrl.create();
+  this.loading.present();
 }
 hide(){
   this.loading.dismiss();

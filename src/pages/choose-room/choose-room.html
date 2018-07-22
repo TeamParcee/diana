@@ -17,4 +17,5 @@
       <button clear ion-button block (click)="joinRoom(room.name)">{{room.name}} ({{room.count}})</button>
   </span>
   <div style="display:none" #map id="map"></div>
+  <p *ngIf="obj">Closest school is {{obj.name}} and it is {{obj.distanceText}} away</p>
 </ion-content>

@@ -31,6 +31,9 @@ export class ChooseRoomPage {
         
   }
 
+  filter = 'school';
+  distanceAway;
+  obj;
   options;
   currentPos;
   places : Array<any> ; 
@@ -41,42 +44,77 @@ export class ChooseRoomPage {
   roomName;
   rooms = [];
   
-  initMap() {
-    navigator.geolocation.getCurrentPosition((location) => {
+ 
+  //get current location
+  getLocation(){
+    let location = new Promise((resolve, reject)=>{
+      navigator.geolocation.getCurrentPosition((res)=>{
+          resolve(res);
+      })
       console.log(location);
-      map = new google.maps.Map(this.mapElement.nativeElement, {
-        center: {lat: location.coords.latitude, lng: location.coords.longitude},
-        zoom: 15
-      });
-  
-      var service = new google.maps.places.PlacesService(map);
-      service.nearbySearch({
-        location: {lat: location.coords.latitude, lng: location.coords.longitude},
-        radius: 1000,
-        type: ['NightClub']
-      }, (results,status) => {
-        let rooms = [];
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-            rooms.push(results[i].name)
-          }
-          this.getGuests(rooms)
-        }
-      });
-    }, (error) => {
-      console.log(error);
-    }, options);
+    })
+    
   }
+  // make a list of the closest objs
+   async getClosestObjs(){
+    let location =  await navigator.geolocation.getCurrentPosition( async (sucess)=>{
+      
+      let result = await sucess;
+      console.log("this should run first");
+      console.log(result);
+      return result
+     
+    })
+    console.log(location, "this should be last")
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   // initilize the lobby
   async init(){
-      this.loading.show();
-      await this.initMap();
-      await this.getUser();
-      await this.resetRoomField();
-      this.loading.hide();
-      // await this.addMap(41.1930980, -96.1647750);
+      // await this.loading.show();
+      // await this.getUser();
+      // await this.resetRoomField();
+      // await this.loading.hide();
+      //this.getClosestObj();
+      this.getLocation();
   }
   // Get user data from local storage so we have users uid
   async getUser(){
@@ -104,16 +142,65 @@ export class ChooseRoomPage {
         rooms.push(room)
       })
       this.rooms = rooms;
-      console.log(this.rooms);
+      // console.log(this.rooms);
     })
   }
 
 
-  // Get the name of the room and send it to the RoomPage
   joinRoom(room){
       this.navCtrl.setRoot("RoomPage", {room: room});
   }
-  
-
+    getClosestObj(){
+      navigator.geolocation.getCurrentPosition( (location) => {
+      let currentLocation = {lat: location.coords.latitude, lng: location.coords.longitude}
+      let that = this;
+      let map = new google.maps.Map(document.getElementById('map'), {
+        center: currentLocation,
+        zoom: 15
+      });
+      let searchService =   new google.maps.places.PlacesService(map);
+      searchService.textSearch({
+        location: currentLocation,
+        radius: '100',
+        query: 'schools'
+      }, function(response, status){
  
+        let res = response[0];
+        let closestObj = res.formatted_address;
+        let currentLocation = {lat: location.coords.latitude, lng: location.coords.longitude}
+        var origin1 = currentLocation;
+        var destinationB = closestObj;
+        
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+          {
+            origins: [origin1],
+            destinations: [destinationB],
+            travelMode: 'WALKING',
+            unitSystem: google.maps.UnitSystem.IMPERIAL,
+          }, callback);
+        
+        function callback(response, status) {
+          if(status == "OK"){
+            let distance = response.rows[0].elements[0].distance;
+            that.obj = {
+                distanceText: distance.text,
+                distanceValue: distance.value,
+                name: res.name,
+            };
+            // console.log(that.obj)
+            
+          } else {
+            console.log("Could not connect to Google Distance API")
+          }
+          
+        }
+
+
+
+
+      });
+    });
+    }
+
 }
