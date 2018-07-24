@@ -14,12 +14,25 @@
 
 
 <ion-content padding>
-    <ion-list *ngIf="newObjs">
-          <ion-item *ngFor="let obj of newObjs">
-              {{obj.name}}
-              <p>{{obj.distanceText}}</p>
+    <ion-list *ngIf="checkIn">
+        <ion-list-header>Check In Places</ion-list-header>
+          <ion-item *ngFor="let obj of checkIn">
+                {{obj.name}}
+                <p>{{obj.distanceText}}</p>
+                <button ion-button clear item-end>Check In</button>
+                <!-- <button ion-button clear item-end>View</button> -->
             </ion-item>
       </ion-list>
+      <ion-list *ngIf="notCheckIn">
+          <ion-list-header>Other Places</ion-list-header>
+          <ion-item *ngFor="let obj of notCheckIn">
+                {{obj.name}}
+                <p>{{obj.distanceText}}</p>
+                <button ion-button clear item-end>View</button>
+                <!-- <button ion-button clear item-end>View</button> -->
+            </ion-item>
+      </ion-list>
+    
   <div style="display:none" #map id="map"></div>
 
 </ion-content>

@@ -13,19 +13,25 @@ export class LobbyPage {
     this.init();
   }
 
-  newObjs;
-  filter = 'nightclub';
+  checkIn;
+  notCheckIn;
+  filter = 'school';
   objs;
   longLat;
   coords
   currentLocation;
 
+
+
   async init(){
     this.coords = await this.getCoordinates();
     this.currentLocation = {lat: this.coords.coords.latitude, lng: this.coords.coords.longitude}
     this.objs = await this.getObjsClose();
-    this.newObjs = await this.getDistances();
-    console.log(this.newObjs)
+    let results:any = await this.getDistances();
+    this.checkIn = results.checkIn;
+    this.notCheckIn = results.notCheckIn;
+    console.log(results, this.checkIn, this.notCheckIn);
+
   }
 
 
@@ -44,17 +50,17 @@ export class LobbyPage {
 
     let service =   new google.maps.places.PlacesService(map);
     return new Promise((res)=>{
-      service.textSearch({
+      service.nearbySearch({
         location: this.currentLocation,
-        radius: '10',
-        query: this.filter,
+        // radius: '10',
+        rankBy: google.maps.places.RankBy.DISTANCE,
+        type: this.filter,
       }, (response:any[])=>{
-        
         let objs = [];
         response.forEach((obj)=>{
           let o = {
             name: obj.name,
-            address: obj.formatted_address,
+            address: obj.vicinity,
           }
           objs.push(o);
         })
@@ -65,9 +71,10 @@ export class LobbyPage {
 
   getDistances(){
 
-    let objs:any[] = this.objs;
+  
     let newObjs = [];
-    objs.forEach((obj)=>{
+    let otherPlaces = [];
+    this.objs.forEach(async (obj)=>{
           let origin = this.currentLocation;
           let destination = obj.address;
           let service = new google.maps.DistanceMatrixService();
@@ -76,53 +83,26 @@ export class LobbyPage {
             destinations: [destination],
             travelMode: "WALKING",
             unitSystem: google.maps.UnitSystem.IMPERIAL,
-          }, (response)=>{
-            
-            let distance = response.rows[0].elements[0].distance;
+          },  async (response)=>{
+            let distance =  await response.rows[0].elements[0].distance;
             let newObj = {
-                distanceText: distance.text,
-                distanceValue: distance.value,
-                name: obj.name,
-                address: obj.address,
-            }
+              distanceText: distance.text,
+              distanceValue: distance.value,
+              name: obj.name,
+              address: obj.address,
+          }
+            if(distance.value < 120){
             newObjs.push(newObj);
+            } else {
+            otherPlaces.push(newObj);
+            }
+            
           })
-          
     })
-    return newObjs;
+    let results = {checkIn: newObjs, notCheckIn: otherPlaces};
+    return results;
 
   }
-    // var origin1 = this.currentLocation;
-    // var destinationB = this.objs;
-    
-    // var service = new google.maps.DistanceMatrixService();
-    // service.getDistanceMatrix(
-    //   {
-    //     origins: [origin1],
-    //     destinations: [destinationB],
-    //     travelMode: 'WALKING',
-    //     unitSystem: google.maps.UnitSystem.IMPERIAL,
-    //   }, (response)=>{
-    //     let distance = response.rows[0].elements[0].distance;
-    //     let newObj = {
-    //       distanceText: distance.text,
-    //         distanceValue: distance.value,
-    //         name: obj.name,
-    //     }
-    //   });
-  
-  //   function callback(response, status) {
-  //     if(status == "OK"){
-  //       let distance = response.rows[0].elements[0].distance;
-  //       that.obj = {
-  //           distanceText: distance.text,
-  //           distanceValue: distance.value,
-  //           name: res.name,
-  //       };
-  //       // console.log(that.obj)
-        
-  //     } else {
-  //       console.log("Could not connect to Google Distance API")
-  //     }
-  // }
+
+
 }
